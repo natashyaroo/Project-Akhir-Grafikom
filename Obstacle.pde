@@ -1,5 +1,5 @@
 class Obstacle{
-  //attributes
+  //atribut
   int _startX;
   int _spikeX;
   int _spikeY;
@@ -8,15 +8,15 @@ class Obstacle{
   int _speed;
   boolean _ignore;
   
-  Obstacle(int x){ //has only one argument, which startX, squareX and spikeX are all set according to
+  Obstacle(int x){ //hanya memiliki satu argumen, di mana startX, squareX, dan spikeX diatur sesuai
     _startX = x;
     _squareX = _startX;
     _spikeX = _startX;
     _ignore = false;
   }
   
-  void spike(int y){ //spike obstacle (lethal from front and on top)
-    _spikeY = y; //the y coordinate of the obstacle, set according to the argument in the constructor
+  void spike(int y){ //rintangan berbentuk paku (mematikan dari depan dan atas)
+    _spikeY = y; //koordinat y dari rintangan, diatur sesuai dengan argumen dalam konstruktor
     strokeWeight(2);
     stroke(150);
     fill(0);
@@ -24,8 +24,8 @@ class Obstacle{
     _spikeX -= _speed;
   }
   
-  void square(int y){ //square obstacle (lethal from the front, safe on top)
-    _squareY = y; //the y coordinate of the obstacle, set according to the argument in the constructor
+  void square(int y){ //rintangan berbentuk kotak (mematikan dari depan, aman di atas)
+    _squareY = y; //koordinat y dari rintangan, diatur sesuai dengan argumen dalam konstruktor
     rectMode(CENTER);
     strokeWeight(2);
     stroke(150);
@@ -34,40 +34,40 @@ class Obstacle{
     _squareX -= _speed;
   }
   
-  void ignore(){ //used to make Player object able to jump on square Obstacle
+  void ignore(){ //digunakan untuk membuat objek Player dapat melompat di atas rintangan berbentuk kotak
     _ignore = true;
   }
   
-//get methods to use when checking for collision with Player object
-  //for the spike obstacle
+//metode get untuk digunakan saat memeriksa tabrakan dengan objek Player
+  //untuk rintangan berbentuk paku
   int spikeGetX1(){
-    return _spikeX+5; //returns front coordinate of the spike 
+    return _spikeX+5; //mengembalikan koordinat depan dari paku
   }
   int spikeGetX2(){
-    return _spikeX+75; //returns back coordinate of the spike 
+    return _spikeX+75; //mengembalikan koordinat belakang dari paku
   }
   int spikeGetY1(){
-    return _spikeY-50; //returns top coordinate of the spike
+    return _spikeY-50; //mengembalikan koordinat atas dari paku
   }
   int spikeGetY2(){
-    return _spikeY; //returns bottom coordinate of the spike
+    return _spikeY; //mengembalikan koordinat bawah dari paku
   }
   
-  //for the square obstacle
-  int squareGetX1(){ //returns front coordinate of the square
+  //untuk rintangan berbentuk kotak
+  int squareGetX1(){ //mengembalikan koordinat depan dari kotak
     return _squareX-25;
   }
-  int squareGetX2(){ //returns back coordinate of the square
+  int squareGetX2(){ //mengembalikan koordinat belakang dari kotak
     return _squareX+75;
   }
-  int squareGetY1(){ //returns top coordinate of the square
+  int squareGetY1(){ //mengembalikan koordinat atas dari kotak
     return _squareY-25;
   }
-  int squareGetY2(){ //returns bottom coordinate of the square
+  int squareGetY2(){ //mengembalikan koordinat bawah dari kotak
     return _squareY+25;
   }
   
-  void move(int speed){ //determines the speed which the obstacles move along the x-axis with
+  void move(int speed){ //menentukan kecepatan pergerakan rintangan di sepanjang sumbu x
     _speed = speed;
   }
 }

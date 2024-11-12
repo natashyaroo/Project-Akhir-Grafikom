@@ -1,76 +1,76 @@
 class Player{
-  //attributes (affected by arguments)
-  int _PlayerX; //x position of the player object
-  int _PlayerY; //y position of the player object
-  int _PlayerSize; //size of the player object
-  int _startY; //starting y position of the player object, used to determine where the "floor" is
+  //atribut (dipengaruhi oleh argumen)
+  int _PlayerX; //posisi x dari objek pemain
+  int _PlayerY; //posisi y dari objek pemain
+  int _PlayerSize; //ukuran dari objek pemain
+  int _startY; //posisi y awal dari objek pemain, digunakan untuk menentukan di mana "lantai" berada
   
-  //attributes (not affected by arguments)
-  int gravity = 6; //gravity that the player object is affected by
-  int jumpCounter = 0; //counter used to determine how long the jump lasts
-  int jumpCounterLimit = 20; //the limit for the jumpCounter
-  boolean isJumping = false; //boolean used to trigger jump
-  float jumpAngle = 0; //the angle at which player object is rotated
-  float incrementAngle = PI/20; //the increment at which the jumpAngle will be changed when jumping
-  boolean notInAir = true; //used to determine when player object is allowed to jump
+  //atribut (tidak dipengaruhi oleh argumen)
+  int gravity = 6; //gravitasi yang memengaruhi objek pemain
+  int jumpCounter = 0; //penghitung yang digunakan untuk menentukan berapa lama lompatan berlangsung
+  int jumpCounterLimit = 20; //batas untuk jumpCounter
+  boolean isJumping = false; //boolean yang digunakan untuk memicu lompatan
+  float jumpAngle = 0; //sudut di mana objek pemain berputar
+  float incrementAngle = PI/20; //inkrementasi sudut saat lompatan terjadi
+  boolean notInAir = true; //digunakan untuk menentukan kapan objek pemain diizinkan melompat
 
-  Player(int x, int y, int size){ //the Player object has three arguments x & y position and size
-    //settings attributes to be equal to arguments that are passed in
+  Player(int x, int y, int size){ //objek Player memiliki tiga argumen: posisi x & y dan ukuran
+    //menyetel atribut agar sama dengan argumen yang dilewatkan
     _PlayerX = x;
     _PlayerY = y;
     _PlayerSize = size;
-    _startY = y; //used to determine when gravity is active
+    _startY = y; //digunakan untuk menentukan kapan gravitasi aktif
   }
   
-  void jump(){ //makes the Player jump, this will be controlled by the person playing the game
-    if(notInAir){ //if the player is on the ground == true
-      isJumping = true; //sets boolean to true, which triggers the jump in "physics()" 
+  void jump(){ //membuat Player melompat, ini akan dikendalikan oleh pemain game
+    if(notInAir){ //jika pemain ada di tanah == true
+      isJumping = true; //mengatur boolean ke true, yang memicu lompatan di "physics()"
     }
   }
   
-  void physics(){ //is put into the "draw()" to constantly update
-    //gravity
-    if(_PlayerY < _startY){ //if player object's y position is less than the starting y position
-      _PlayerY += gravity; //increment player object's y position by gravity
-      notInAir = false; //player object is not in the air, stopping "jump()" from working
+  void physics(){ //ditempatkan dalam "draw()" untuk terus diperbarui
+    //gravitasi
+    if(_PlayerY < _startY){ //jika posisi y objek pemain lebih kecil dari posisi y awal
+      _PlayerY += gravity; //meningkatkan posisi y objek pemain dengan gravitasi
+      notInAir = false; //objek pemain tidak di udara, menghentikan "jump()" dari bekerja
     }else{
-      notInAir = true; //if player is on the "floor" = true, allowing "jump()" to work
+      notInAir = true; //jika pemain berada di "lantai" = true, memungkinkan "jump()" berfungsi
     }
     
-    //jump triggered by "jump()" method
+    //lompatan dipicu oleh metode "jump()"
     if(isJumping){
-      _PlayerY -= 12; //increments the y position of the player simulating a jump
-      jumpCounter += 1; //increments the jumpCounter, which determines when to stop jumping 
+      _PlayerY -= 12; //meningkatkan posisi y pemain, mensimulasikan lompatan
+      jumpCounter += 1; //meningkatkan jumpCounter, yang menentukan kapan lompatan berhenti
     }
-    if(jumpCounter >= jumpCounterLimit){ //when the counter reaches the limit the jump stops
+    if(jumpCounter >= jumpCounterLimit){ //ketika penghitung mencapai batas, lompatan berhenti
       isJumping = false;
-      jumpCounter = 0; //the counter is reset
+      jumpCounter = 0; //penghitung diatur ulang
     }
-    //spin while in air
+    //berputar saat di udara
     if(!notInAir){
-      jumpAngle += incrementAngle; //increments the jumpAngle, activating the rotate in "display()"
+      jumpAngle += incrementAngle; //meningkatkan jumpAngle, mengaktifkan rotasi dalam "display()"
     }
     if(notInAir){
-      jumpAngle = 0; //reset the jumpAngle so that the Player object is always even when on the "floor"
+      jumpAngle = 0; //mengatur ulang jumpAngle sehingga objek Player selalu sejajar saat di "lantai"
     }
   }
   
-  //get methods to use when checking for collision with obstacles
+  //metode get untuk digunakan saat memeriksa tabrakan dengan rintangan
   int getX(){ 
-    return _PlayerX + _PlayerSize/2; //returns the location of the player's front coordinate
+    return _PlayerX + _PlayerSize/2; //mengembalikan lokasi koordinat depan pemain
   }
   int getY(){
-    return _PlayerY + _PlayerSize/2; //returns the location of the players's bottom coordinate
+    return _PlayerY + _PlayerSize/2; //mengembalikan lokasi koordinat bawah pemain
   }
 
-  void display(){ //is put into "draw()" to constantly update
-    pushMatrix(); //matrix necessary to contain the rotate transformation
+  void display(){ //ditempatkan dalam "draw()" untuk terus diperbarui
+    pushMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
     
-    rectMode(CENTER); //set rectMode
-    translate(_PlayerX, _PlayerY); //sets the 0,0 to be inside itself, used for rotating correctly
-    rotate(jumpAngle); //is always rotating, but the jumpAngle is set to 0, which means no rotating
+    rectMode(CENTER); //mengatur rectMode
+    translate(_PlayerX, _PlayerY); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
+    rotate(jumpAngle); //selalu berputar, tetapi jumpAngle diatur ke 0, yang berarti tidak berputar
     
-    //similar to the scenery function it has gradient colours
+    //mirip dengan fungsi scenery, memiliki warna gradasi
     strokeWeight(2);
     stroke(22, 85, 60);
     fill(53, 240, 165);
@@ -87,6 +87,6 @@ class Player{
     fill(68, 255, 180);
     ellipse(0, 0, _PlayerSize*0.5, _PlayerSize*0.5);
     
-    popMatrix();//matrix necessary to contain the rotate transformation
+    popMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
   }
 }
