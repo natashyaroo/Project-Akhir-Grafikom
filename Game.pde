@@ -5,16 +5,29 @@ class Game {
   int highScore = 0; //membuat penghitung yang digunakan untuk menampilkan skor tertinggi pemain
   int fade = 0; //digunakan untuk efek memudar ke gelap saat pemain menang
 
+  boolean overBox1 = false;
+
+
   void pause() {
+    
     background(140);
     if (backgroundMusic.isPlaying()) {
       backgroundMusic.pause();
     }
+    
   }
 
   void display() {
+
     //latar belakang
-    scenery();
+    //scenery();
+    
+    push();
+    background(160);
+    strokeWeight(5);
+    stroke(0);
+    fill(#228ED3);
+    rect(-10, 552, 1050, 100);
 
     //rintangan
     for (int i = 0; i < 300; i++) {
@@ -31,6 +44,7 @@ class Game {
     timer();
     scoreboard();
     displayControls();
+    pop();
   }
 
   void collision() {

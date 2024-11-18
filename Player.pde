@@ -70,22 +70,10 @@ class Player{
     translate(_PlayerX, _PlayerY); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
     rotate(jumpAngle); //selalu berputar, tetapi jumpAngle diatur ke 0, yang berarti tidak berputar
     
-    //mirip dengan fungsi scenery, memiliki warna gradasi
     strokeWeight(2);
     stroke(22, 85, 60);
     fill(53, 240, 165);
     rect(0, 0, _PlayerSize, _PlayerSize);
-    noStroke();
-    fill(56, 243, 168);
-    ellipse(0, 0, _PlayerSize*0.9, _PlayerSize*0.9);
-    fill(59, 246, 171);
-    ellipse(0, 0, _PlayerSize*0.8, _PlayerSize*0.8);
-    fill(62, 249, 174);
-    ellipse(0, 0, _PlayerSize*0.7, _PlayerSize*0.7);
-    fill(65, 252, 177);
-    ellipse(0, 0, _PlayerSize*0.6, _PlayerSize*0.6);
-    fill(68, 255, 180);
-    ellipse(0, 0, _PlayerSize*0.5, _PlayerSize*0.5);
     
     popMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
   }

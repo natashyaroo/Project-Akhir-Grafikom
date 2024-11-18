@@ -40,13 +40,17 @@ void setup() {
 }
 
 void draw() {
-  
-  if (!isPlaying && !isPause) {
+  if (!isPlaying) {
+
     menu.display();
   } else {
     if (!isPause) {
+
+
       game.display();
+
     } else {
+
       game.pause();
     }
   }
@@ -63,24 +67,40 @@ void keyPressed() {
   case ' ': //saat tombol spasi ditekan
     hero.jump();
     break;
+
+
+  case 'r':
+    if (isPause) {
+      game.reset();
+      game.display();
+      isPause = false;
+    }
+
+  case 'p':
+    if (isPause) {
+      isPlaying = false;
+      isPause = false;
+      game.reset();
+      menu.display();
+    }
   }
   switch(keyCode) {
     //melompat (menggunakan Panah Atas)
   case UP: //saat 'Panah Atas' ditekan
     hero.jump();
     break;
-    
+
   case BACKSPACE:
-    if(!isPause){
+    if (!isPause) {
       isPause = true;
-    }else{
+    } else {
       isPause = false;
       backgroundMusic.play();
     }
   }
 }
 
-void mousePressed() {
+void mouseClicked() {
   if (menu.overBox1) {
     isPlaying = true;
   }
