@@ -11,9 +11,24 @@ class Game {
   void pause() {
     
     background(140);
-    if (backgroundMusic.isPlaying()) {
-      backgroundMusic.pause();
-    }
+
+    
+    text("X: "+mouseX+"   Y: "+mouseY, 50,50);
+    
+    
+    push();
+    textSize(70);
+    text("PAUSE!!!", 205,200);
+    textSize(40);
+    text("Score tertinggi : "+highScore/60, 490,200);
+    pop();
+    
+    pushMatrix();
+    translate(width/2,height/2,0);
+    text("Navigasi:", -200,0);
+    text("p => kembali ke main menu", -200,50);
+    text("r => retry game", -200,100);
+    popMatrix();
     
   }
 

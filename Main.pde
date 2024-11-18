@@ -24,7 +24,7 @@ boolean isPause = false; //kondisi untuk mem-pause game
 
 
 void setup() {
-  size(1000, 600);
+  size(1000, 600, P3D);
   //menginisialisasi musik latar
   backgroundMusic = new SoundFile(this, "Dance of the Pixies.mp3");
   backgroundMusic.play();
@@ -40,6 +40,7 @@ void setup() {
 }
 
 void draw() {
+
   if (!isPlaying) {
 
     menu.display();
@@ -48,7 +49,6 @@ void draw() {
 
 
       game.display();
-
     } else {
 
       game.pause();
@@ -91,11 +91,16 @@ void keyPressed() {
     break;
 
   case BACKSPACE:
-    if (!isPause) {
+    if (!isPause && isPlaying) {
       isPause = true;
+      if (backgroundMusic.isPlaying()) {
+        backgroundMusic.pause();
+      }
     } else {
       isPause = false;
-      backgroundMusic.play();
+      if (!backgroundMusic.isPlaying()) {
+        backgroundMusic.play();
+      }
     }
   }
 }

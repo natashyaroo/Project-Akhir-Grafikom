@@ -4,8 +4,8 @@ class Menu {
   int xButton2 = 370;
   int yButton1 = 300;
   int yButton2 = 380;
-  
-  //status jika kursor diluar button 
+
+  //status jika kursor diluar button
   boolean overBox1 = false;
   boolean overBox2 = false;
 
@@ -15,23 +15,33 @@ class Menu {
 
   void display() {
     background(180);
+
+    pointLight(0, 255, 0, mouseX, mouseY, 200);
+    pointLight(0, 0, 255, xButton1, yButton1, 50);
+
+
+
+    //text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
+
+    pushMatrix();
     textSize(40);
     text("GEOMETRY DASH GAME", 270, 100);
+    popMatrix();
 
     rect(xButton1, yButton1, wSize, hSize);
-    rect(xButton2, yButton2, wSize, hSize);
+
+    push();
+
+    fill(0);
+    text("PLAY", 422, 338);
+
+    pop();
 
     // perkondisian jika kursor diluar button
     if (mouseX >= xButton1 && mouseX <= xButton1+wSize && mouseY >= yButton1 && mouseY <= yButton1+hSize) {
       overBox1 = true;
     } else {
       overBox1 = false;
-    }
-
-    if (mouseX >= xButton2 && mouseX <= xButton2+wSize && mouseY >= yButton2 && mouseY <= yButton2+hSize) {
-      overBox2 = true;
-    } else {
-      overBox2 = false;
     }
   }
 }
