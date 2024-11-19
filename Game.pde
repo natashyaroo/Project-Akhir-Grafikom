@@ -9,34 +9,42 @@ class Game {
 
 
   void pause() {
-    
-    background(140);
 
+    background(#011d33);
     
-    text("X: "+mouseX+"   Y: "+mouseY, 50,50);
-    
-    
+    image(img, 0, 240);
+    image(img, 631, 240);
+
     push();
+
+    translate(-30, 70, 0);
+    text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
+
+    push();
+    fill(255, 0, 0);
     textSize(70);
-    text("PAUSE!!!", 205,200);
-    textSize(40);
-    text("Score tertinggi : "+highScore/60, 490,200);
+    text("PAUSE!!!", 223, 200);
+    textSize(25);
+    text("Score tertinggi : "+highScore/60, 267, 250);
     pop();
-    
+
     pushMatrix();
-    translate(width/2,height/2,0);
-    text("Navigasi:", -200,0);
-    text("p => kembali ke main menu", -200,50);
-    text("r => retry game", -200,100);
+    textSize(23);
+    fill(255, 0, 0);
+    translate(width/2, height/2, 0);
+    text("Navigasi:", -200, 0);
+    text("p => kembali ke main menu", -200, 50);
+    text("r => retry game", -200, 100);
     popMatrix();
-    
+
+    pop();
   }
 
   void display() {
 
     //latar belakang
     //scenery();
-    
+
     push();
     background(160);
     strokeWeight(5);
@@ -67,10 +75,10 @@ class Game {
     for (int i = 0; i < 300; i++) {
       if (hero.getX() > obstacles[i].spikeGetX1() && hero.getX() < obstacles[i].spikeGetX2()) {
         if (hero._PlayerY > obstacles[i].spikeGetY1() && hero._PlayerY < obstacles[i].spikeGetY2()) {
-          println("Kematian oleh Paku");
+          println("tertusuk Paku");
+          sfxDeath.play();
           backgroundMusic.stop();
-          deathNoise.play();
-          delay(1000);
+          delay(2900);
           reset();
         }
       }
@@ -78,10 +86,10 @@ class Game {
       if (hero.getX() > obstacles[i].squareGetX1() && hero.getX() < obstacles[i].squareGetX2()) {
         //jika pemain menabrak bagian depan kotak
         if (hero._PlayerY > obstacles[i].squareGetY1() && hero._PlayerY < obstacles[i].squareGetY2()) {
-          println("Kematian oleh Kotak");
+          println("tertabrak Kotak");
+          sfxDeath.play();
           backgroundMusic.stop();
-          deathNoise.play();
-          delay(1000);
+          delay(2900); // mendelay selama 2.9 detik
           reset();
         }
         if (hero.getY() < obstacles[i].squareGetY1()) { //jika pemain menabrak bagian atas kotak
@@ -105,6 +113,8 @@ class Game {
     //memutar ulang musik dari awal
     backgroundMusic.stop();
     backgroundMusic.play();
+    backgroundMusic.amp(0.2);
+
     //mereset timer
     timer = 0;
     //mereset rintangan
@@ -125,12 +135,12 @@ class Game {
     }
     textAlign(CENTER);
     //tampilan skor tertinggi
-    textSize(35);
+    textSize(15);
     fill(0);
     text("Skor Tertinggi: "+highScore/60, 800, 50); //skor tertinggi dibagi 60 sehingga setiap detik = 1 poin
     //tampilan penghitung kematian
     fill(255);
-    textSize(45);
+    textSize(15);
     text(deathCounter, 500, 60);
   }
 
@@ -138,12 +148,13 @@ class Game {
     //menampilkan kontrol hingga timer mencapai 250, yaitu hingga menemui rintangan pertama
     if (timer < 250) {
       textAlign(CENTER);
-      textSize(20);
+      textSize(12);
       fill(0);
       text("LOMPAT: PANAH ATAS, W, atau SPASI", 220, 50);
+      text("BACKSPACE: PAUSE GAME", 220, 80);
     } else { //menampilkan skor saat ini
       textAlign(CENTER);
-      textSize(35);
+      textSize(15);
       fill(0);
       text("Skor saat ini: "+timer/60, 200, 50);
     }

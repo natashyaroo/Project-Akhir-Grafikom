@@ -1,9 +1,9 @@
-//mengimpor pustaka soundfile
 import processing.sound.*;
-//mendeklarasikan backgroundMusic (musik latar)
+//mendeklarasikan backsound
 SoundFile backgroundMusic;
-//mendeklarasikan deathNoise (suara mati)
-SoundFile deathNoise;
+//mendeklarasikan sfx sound
+SoundFile sfxJump;
+SoundFile sfxDeath;
 
 //mendeklarasikan hero (pemain)
 Player hero;
@@ -21,16 +21,27 @@ Menu menu = new Menu();
 
 boolean isPlaying = false; //kondisi sebelum masuk kedalam game
 boolean isPause = false; //kondisi untuk mem-pause game
+PImage img; // inisiasi PImage
+PFont font; // insiasi font
+
 
 
 void setup() {
   size(1000, 600, P3D);
+
+  img = loadImage("image.jpg"); // mengambil gambar yang sudah ditambahkan ke directory 'data'
+
+  font = createFont("Press Start 2P", 32); // memilig font yang tersedia di dekstop dan memberi parameter smooth nya
+  textFont(font); // mengganti font yang sebelum nya sudah dipilih
+
   //menginisialisasi musik latar
-  backgroundMusic = new SoundFile(this, "Dance of the Pixies.mp3");
+  backgroundMusic = new SoundFile(this, "backgroundmusic.mp3");
   backgroundMusic.play();
+  backgroundMusic.amp(0.2); //amplitudo di gunakan untuk mengatur volume (scale 0-1)
+  backgroundMusic.rate(1.25); // mengatur kecepatan pemutaran sound
   //menginisialisasi suara kematian
-  deathNoise = new SoundFile(this, "Death Noise.wav");
-  deathNoise.rate(1.10); //mengubah kecepatan pemutaran, karena processing tampaknya memutarnya sedikit terlalu lambat
+  sfxJump = new SoundFile(this, "jump.mp3");
+  sfxDeath = new SoundFile(this, "death.mp3");
   //menginisialisasi hero (pemain)
   hero = new Player(150, 524, 50); //memiliki parameter x, y, dan ukuran; y dan ukuran sebaiknya tidak diubah
   //menginisialisasi rintangan
@@ -40,7 +51,6 @@ void setup() {
 }
 
 void draw() {
-
   if (!isPlaying) {
 
     menu.display();
@@ -60,12 +70,17 @@ void keyPressed() {
   switch(key) {
     //melompat (menggunakan W)
   case 'w': //saat 'w' ditekan
-    hero.jump();
+    if (isPlaying) {
+      hero.jump();
+    }
+
     break;
 
     //melompat (menggunakan Spasi)
   case ' ': //saat tombol spasi ditekan
-    hero.jump();
+    if (isPlaying) {
+      hero.jump();
+    }
     break;
 
 
@@ -87,7 +102,11 @@ void keyPressed() {
   switch(keyCode) {
     //melompat (menggunakan Panah Atas)
   case UP: //saat 'Panah Atas' ditekan
-    hero.jump();
+
+    if (isPlaying) {
+      hero.jump();
+    }
+
     break;
 
   case BACKSPACE:
@@ -99,6 +118,7 @@ void keyPressed() {
     } else {
       isPause = false;
       if (!backgroundMusic.isPlaying()) {
+        backgroundMusic.amp(0.2);
         backgroundMusic.play();
       }
     }

@@ -15,25 +15,23 @@ class Menu {
 
   void display() {
     background(180);
-
+    
     pointLight(0, 255, 0, mouseX, mouseY, 200);
     pointLight(0, 0, 255, xButton1, yButton1, 50);
+    
+    text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
 
-
-
-    //text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
-
-    pushMatrix();
-    textSize(40);
-    text("GEOMETRY DASH GAME", 270, 100);
-    popMatrix();
+    push();
+    textSize(50);
+    text("GEOMETRY DASH GAME", 48, 190);
+    pop();
 
     rect(xButton1, yButton1, wSize, hSize);
 
     push();
-
+    textSize(30);
     fill(0);
-    text("PLAY", 422, 338);
+    text("PLAY", 412, 340);
 
     pop();
 
