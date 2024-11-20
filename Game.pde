@@ -11,14 +11,14 @@ class Game {
   void pause() {
 
     background(#011d33);
-    
+
     image(img, 0, 240);
     image(img, 631, 240);
 
     push();
 
     translate(-30, 70, 0);
-    text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
+    //text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
 
     push();
     fill(255, 0, 0);
@@ -42,15 +42,9 @@ class Game {
 
   void display() {
 
-    //latar belakang
-    //scenery();
-
     push();
-    background(160);
-    strokeWeight(5);
-    stroke(0);
-    fill(#228ED3);
-    rect(-10, 552, 1050, 100);
+    //latar belakang
+    scenery();
 
     //rintangan
     for (int i = 0; i < 300; i++) {
@@ -136,7 +130,7 @@ class Game {
     textAlign(CENTER);
     //tampilan skor tertinggi
     textSize(15);
-    fill(0);
+    fill(255);
     text("Skor Tertinggi: "+highScore/60, 800, 50); //skor tertinggi dibagi 60 sehingga setiap detik = 1 poin
     //tampilan penghitung kematian
     fill(255);
@@ -149,47 +143,123 @@ class Game {
     if (timer < 250) {
       textAlign(CENTER);
       textSize(12);
-      fill(0);
+      fill(255);
       text("LOMPAT: PANAH ATAS, W, atau SPASI", 220, 50);
       text("BACKSPACE: PAUSE GAME", 220, 80);
     } else { //menampilkan skor saat ini
       textAlign(CENTER);
       textSize(15);
-      fill(0);
+      fill(255);
       text("Skor saat ini: "+timer/60, 200, 50);
     }
   }
 
-  void scenery() { //ini mencakup seluruh jendela, sehingga membuat "background()" tidak diperlukan
-    //latar belakang (memiliki beberapa perubahan warna dan ellipses untuk meniru matahari terbenam)
+  void scenery() {
+    background(20, 24, 82);
+
+
+    //latar papan score
+    push();
+    fill(0);
     noStroke();
-    fill(205, 120, 0);
-    ellipse(500, 300, 1500, 1500);
-    fill(210, 125, 5);
-    ellipse(500, 600, 1400, 1400);
-    fill(215, 130, 10);
-    ellipse(500, 600, 1300, 1300);
-    fill(220, 135, 15);
-    ellipse(500, 600, 1200, 1200);
-    fill(225, 140, 20);
-    ellipse(500, 600, 1100, 1100);
-    fill(230, 145, 25);
-    ellipse(500, 600, 1000, 1000);
-    fill(235, 150, 30);
-    ellipse(500, 600, 900, 900);
-    fill(240, 155, 35);
-    ellipse(500, 600, 800, 800);
-    fill(245, 160, 40);
-    ellipse(500, 600, 700, 700);
-    fill(250, 165, 45);
-    ellipse(500, 600, 600, 600);
-    fill(255, 170, 50);
-    ellipse(500, 600, 500, 500);
-    //tanah
-    strokeWeight(3);
-    stroke(0);
-    fill(255, 50, 50, 150);
-    rect(500, 600, 1050, 100);
+    rect(0, 0, 1000, 90);
+
+    pop();
+
+    push();
+    translate(0, 100);
+
+    // gambar bulan
+    push();
+    fill(255, 255, 150); // Warna kuning terang untuk bulan
+    arc(697, 117, 100, 100, radians(45), radians(225)); // menentukan nilai radians berdasarkan besaran derajat
+    pop();
+
+    // gambar awan
+    push();
+    cloudCircle(118, 118, 60);
+    cloudEllipse(369, 118, 50);
+    cloudEllipse(868, 118, 55);
+    pop();
+
+
+    // gambar bukit
+    push();
+
+    fill(#729BBC);
+    //stroke(255);
+    //noFill();
+    beginShape();
+    vertex(0, 412);
+    vertex(182, 285);
+    vertex(235, 215);
+    curveVertex(235, 215);
+    curveVertex(235, 215);
+    curveVertex(269, 195);
+    curveVertex(293, 219);
+    curveVertex(293, 219);
+    vertex(293, 219);
+    vertex(302, 254);
+    vertex(418, 372);
+    vertex(592, 392);
+    vertex(689, 348);
+    bezierVertex(809, 227, 873, 263, 921, 361);
+    vertex(965, 399);
+    vertex(1000, 411);
+    vertex(1000, 557);
+    vertex(0, 557);
+    vertex(0, 412);
+    endShape();
+
+    pop();
+
+
+
+    // gambar bintang dan rasi bintang
+    push();
+    stars(207, 54);
+    stars(210, 85);
+    stars(305, 57);
+    stars(425, 54);
+    stars(485, 76);
+    stars(538, 105);
+    stars(525, 27);
+    stars(276, 125);
+    stars(55, 43);
+    stars(696, 32);
+    stars(771, 42);
+    stars(750, 72);
+    stars(820, 31);
+    stars(29, 88);
+    stars(926, 33);
+    stars(967, 82);
+
+    //rasi bintang
+    push();
+    strokeCap(ROUND);
+    stroke(#FFEC12);
+    strokeWeight(2);
+    line(525, 26, 538, 104);
+    line(538, 104, 486, 76);
+    line(486, 76, 426, 54);
+    line(426, 54, 304, 55);
+    line(304, 55, 277, 125);
+    line(304, 55, 211, 83);
+    pop();
+
+    pop();
+
+    pop();
+
+
+    // lantai player
+    push();
+    noStroke();
+    fill(#06CB3F);
+    rect(0, 552, 1000, 20);
+    fill(#A05C0A);
+    rect(0, 570, 1000, 50);
+    pop();
   }
 
   void gameComplete() {
@@ -205,6 +275,37 @@ class Game {
     fill(random(255), random(255), random(255));
     text("Anda Menang!", 500, 300);
   }
+
+
+
+
+  void cloudCircle(float x, float y, float size) {
+    noStroke();
+    fill(255); // Warna putih untuk awan
+    circle(x, y, size);               // Lingkaran utama
+    circle(x - size * 0.5, y, size * 0.7); // Lingkaran kiri
+    circle(x + size * 0.5, y, size * 0.7); // Lingkaran kanan
+    circle(x, y - size * 0.4, size * 0.8); // Lingkaran atas
+  }
+
+
+
+  void cloudEllipse(float x, float y, float size) {
+    noStroke();
+    fill(255); // Warna putih untuk awan
+    ellipse(x, y, size, size);               // Lingkaran utama
+    ellipse(x - size * 0.5, y, size * 0.7, size * 0.7); // Lingkaran kiri
+    ellipse(x + size * 0.5, y, size * 0.7, size * 0.7); // Lingkaran kanan
+    ellipse(x, y - size * 0.4, size * 0.8, size * 0.8); // Lingkaran atas
+  }
+
+
+  void stars(int x, int y) {
+    stroke(#FFEC12);
+    strokeWeight(8);
+    point(x, y);
+  }
+
 
 
   void obstacleSpawn() {//memunculkan rintangan berdasarkan timer (bagian kode ini sangat panjang)
@@ -339,12 +440,7 @@ Catatan untuk diri sendiri:
     if (timer > 1698) {
       obstacles[25].spike(550);
     }
-    if (timer > 1730) {
-      obstacles[26].spike(550);
-    }
-    if (timer > 1738) {
-      obstacles[27].spike(550);
-    }
+
     if (timer > 1775) {
       obstacles[28].spike(550);
     }
@@ -554,846 +650,5 @@ Catatan untuk diri sendiri:
       obstacles[70].spike(550);
     }
     //===============(3600 = 60s)===============
-    if (timer > 3650) {
-      obstacles[43].square(525);
-    }
-    if (timer > 3690) {
-      obstacles[44].square(475);
-    }
-    if (timer > 3725) {
-      obstacles[45].square(425);
-    }
-    if (timer > 3760) {
-      obstacles[46].square(375);
-    }
-    if (timer > 3795) {
-      obstacles[47].square(325);
-    }
-    if (timer > 3830) {
-      obstacles[48].square(275);
-    }
-    if (timer > 3838) {
-      obstacles[71].spike(550);
-    }
-    if (timer > 3846) {
-      obstacles[72].spike(550);
-    }
-    if (timer > 3854) {
-      obstacles[73].spike(550);
-    }
-    if (timer > 3862) {
-      obstacles[74].spike(550);
-    }
-    if (timer > 4000) {
-      obstacles[49].square(525);
-    }
-    if (timer > 4040) {
-      obstacles[50].square(475);
-    }
-    if (timer > 4075) {
-      obstacles[51].square(425);
-    }
-    if (timer > 4110) {
-      obstacles[52].square(375);
-    }
-    if (timer > 4145) {
-      obstacles[53].square(325);
-    }
-    if (timer > 4180) {
-      obstacles[54].square(275);
-    }
-    if (timer > 4188) {
-      obstacles[75].spike(550);
-    }
-    if (timer > 4196) {
-      obstacles[76].spike(550);
-    }
-    //===============(4200 = 70s)===============
-    if (timer > 4204) {
-      obstacles[77].spike(550);
-    }
-    if (timer > 4212) {
-      obstacles[78].spike(550);
-    }
-    if (timer > 4300) {
-      obstacles[55].square(525);
-    }
-    if (timer > 4340) {
-      obstacles[56].square(475);
-    }
-    if (timer > 4375) {
-      obstacles[57].square(425);
-    }
-    if (timer > 4410) {
-      obstacles[58].square(375);
-    }
-    if (timer > 4445) {
-      obstacles[59].square(325);
-    }
-    if (timer > 4480) {
-      obstacles[60].square(275);
-    }
-    if (timer > 4488) {
-      obstacles[79].spike(550);
-    }
-    if (timer > 4496) {
-      obstacles[80].spike(550);
-    }
-    if (timer > 4504) {
-      obstacles[81].spike(550);
-    }
-    if (timer > 4512) {
-      obstacles[82].spike(550);
-    }
-    if (timer > 4600) {
-      obstacles[83].spike(550);
-    }
-    if (timer > 4650) {
-      obstacles[84].spike(500);
-    }
-    if (timer > 4700) {
-      obstacles[85].spike(550);
-    }
-    if (timer > 4750) {
-      obstacles[86].spike(515);
-      obstacles[87].spike(550);
-    }
-    if (timer > 4800) {
-      obstacles[88].spike(550);
-    }
-    //===============(4800 = 80s)===============
-    if (timer > 4850) {
-      obstacles[89].spike(500);
-    }
-    if (timer > 4900) {
-      obstacles[90].spike(550);
-    }
-    if (timer > 4950) {
-      obstacles[91].spike(515);
-      obstacles[92].spike(550);
-    }
-    if (timer > 5000) {
-      obstacles[93].spike(550);
-    }
-    if (timer > 5008) {
-      obstacles[94].spike(550);
-    }
-    if (timer > 5046) {
-      obstacles[95].spike(550);
-    }
-    if (timer > 5100) {
-      obstacles[96].spike(515);
-      obstacles[97].spike(550);
-    }
-    if (timer > 5170) {
-      obstacles[98].spike(515);
-      obstacles[99].spike(550);
-    }
-    if (timer > 5230) {
-      obstacles[100].spike(515);
-      obstacles[101].spike(550);
-    }
-    if (timer > 5280) {
-      obstacles[102].spike(515);
-      obstacles[103].spike(550);
-    }
-    if (timer > 5330) {
-      obstacles[104].spike(515);
-      obstacles[105].spike(550);
-    }
-    if (timer > 5380) {
-      obstacles[106].spike(515);
-      obstacles[107].spike(550);
-    }
-    //===============(5400 = 90s)===============
-    if (timer > 5500) {
-      obstacles[61].square(525);
-    }
-    if (timer > 5540) {
-      obstacles[62].square(475);
-    }
-    if (timer > 5575) {
-      obstacles[63].square(425);
-    }
-    if (timer > 5605) {
-      obstacles[64].square(375);
-    }
-    if (timer > 5625) {
-      obstacles[65].square(425);
-    }
-    if (timer > 5640) {
-      obstacles[108].spike(550);
-    }
-    if (timer > 5648) {
-      obstacles[109].spike(400);
-      obstacles[110].spike(550);
-    }
-    if (timer > 5656) {
-      obstacles[111].spike(400);
-      obstacles[112].spike(550);
-    }
-    if (timer > 5750) {
-      obstacles[66].square(525);
-    }
-    if (timer > 5790) {
-      obstacles[67].square(475);
-    }
-    if (timer > 5825) {
-      obstacles[68].square(425);
-    }
-    if (timer > 5860) {
-      obstacles[69].square(375);
-    }
-    if (timer > 5860) {
-      obstacles[113].spike(515);
-      obstacles[114].spike(550);
-    }
-    if (timer > 5876) {
-      obstacles[115].spike(515);
-      obstacles[116].spike(550);
-    }
-    if (timer > 5950) {
-      obstacles[70].square(525);
-    }
-    if (timer > 5990) {
-      obstacles[71].square(475);
-    }
-    //===============(6000 = 100s)===============
-    if (timer > 6025) {
-      obstacles[72].square(425);
-      obstacles[117].spike(550);
-    }
-    if (timer > 6060) {
-      obstacles[73].square(375);
-    }
-    if (timer > 6068) {
-      obstacles[118].spike(350);
-    }
-    if (timer > 6076) {
-      obstacles[119].spike(350);
-    }
-    if (timer > 6084) {
-      obstacles[120].spike(350);
-    }
-    if (timer > 6092) {
-      obstacles[121].spike(350);
-    }
-    if (timer > 6200) {
-      obstacles[74].square(525);
-    }
-    if (timer > 6240) {
-      obstacles[75].square(475);
-    }
-    if (timer > 6275) {
-      obstacles[76].square(425);
-    }
-    if (timer > 6310) {
-      obstacles[77].square(375);
-    }
-    if (timer > 6318) {
-      obstacles[122].spike(350);
-    }
-    if (timer > 6326) {
-      obstacles[123].spike(350);
-    }
-    if (timer > 6334) {
-      obstacles[124].spike(350);
-    }
-    if (timer > 6342) {
-      obstacles[125].spike(350);
-    }
-    if (timer > 6450) {
-      obstacles[78].square(525);
-    }
-    if (timer > 6490) {
-      obstacles[79].square(475);
-    }
-    if (timer > 6525) {
-      obstacles[80].square(425);
-    }
-    if (timer > 6560) {
-      obstacles[81].square(375);
-    }
-    if (timer > 6560) {
-      obstacles[126].spike(515);
-      obstacles[127].spike(550);
-    }
-    if (timer > 6576) {
-      obstacles[128].spike(515);
-      obstacles[129].spike(550);
-    }
-    //===============(6600 = 110s)===============
-    if (timer > 6700) {
-      obstacles[82].square(525);
-    }
-    if (timer > 6740) {
-      obstacles[83].square(475);
-    }
-    if (timer > 6775) {
-      obstacles[84].square(425);
-    }
-    if (timer > 6791) {
-      obstacles[130].spike(400);
-    }
-    if (timer > 6799) {
-      obstacles[131].spike(400);
-    }
-    if (timer > 6820) {
-      obstacles[85].square(425);
-    }
-    if (timer > 6836) {
-      obstacles[132].spike(400);
-    }
-    if (timer > 6844) {
-      obstacles[133].spike(400);
-    }
-    if (timer > 6865) {
-      obstacles[86].square(425);
-    }
-    if (timer > 6881) {
-      obstacles[134].spike(400);
-    }
-    if (timer > 6889) {
-      obstacles[135].spike(400);
-    }
-    if (timer > 6910) {
-      obstacles[87].square(425);
-    }
-    if (timer > 6945) {
-      obstacles[88].square(375);
-    }
-    if (timer > 6980) {
-      obstacles[89].square(325);
-    }
-    if (timer > 6996) {
-      obstacles[136].spike(300);
-    }
-    if (timer > 7004) {
-      obstacles[137].spike(300);
-    }
-    if (timer > 7025) {
-      obstacles[90].square(325);
-    }
-    if (timer > 7041) {
-      obstacles[138].spike(300);
-    }
-    if (timer > 7049) {
-      obstacles[139].spike(300);
-    }
-    if (timer > 7070) {
-      obstacles[91].square(325);
-    }
-    if (timer > 7086) {
-      obstacles[140].spike(300);
-    }
-    if (timer > 7094) {
-      obstacles[141].spike(300);
-    }
-    if (timer > 7115) {
-      obstacles[92].square(325);
-    }
-    if (timer > 7135) {
-      obstacles[93].square(375);
-    }
-    if (timer > 7155) {
-      obstacles[94].square(425);
-    }
-    if (timer > 7175) {
-      obstacles[95].square(475);
-    }
-    if (timer > 7191) {
-      obstacles[142].spike(450);
-    }
-    if (timer > 7199) {
-      obstacles[143].spike(450);
-    }
-    //===============(7200 = 120s)===============
-    if (timer > 7220) {
-      obstacles[96].square(475);
-    }
-    if (timer > 7236) {
-      obstacles[144].spike(450);
-    }
-    if (timer > 7244) {
-      obstacles[145].spike(450);
-    }
-    if (timer > 7265) {
-      obstacles[97].square(475);
-    }
-    if (timer > 7281) {
-      obstacles[146].spike(450);
-      obstacles[147].spike(550);
-    }
-    if (timer > 7289) {
-      obstacles[148].spike(450);
-      obstacles[149].spike(550);
-    }
-    if (timer > 7310) {
-      obstacles[98].square(475);
-    }
-    if (timer > 7335) {
-      obstacles[99].square(525);
-    }
-    if (timer > 7380) {
-      obstacles[150].spike(550);
-    }
-    if (timer > 7388) {
-      obstacles[151].spike(550);
-    }
-    if (timer > 7433) {
-      obstacles[152].spike(550);
-    }
-    if (timer > 7441) {
-      obstacles[153].spike(550);
-    }
-    if (timer > 7536) {
-      obstacles[154].spike(550);
-    }
-    if (timer > 7550) {
-      obstacles[100].square(525);
-    }
-    if (timer > 7571) {
-      obstacles[155].spike(500);
-    }
-    if (timer > 7585) {
-      obstacles[101].square(475);
-    }
-    if (timer > 7606) {
-      obstacles[156].spike(450);
-    }
-    if (timer > 7620) {
-      obstacles[102].square(425);
-    }
-    if (timer > 7641) {
-      obstacles[157].spike(400);
-    }
-    if (timer > 7655) {
-      obstacles[103].square(375);
-    }
-    if (timer > 7680) {
-      obstacles[104].square(425);
-    }
-    if (timer > 7715) {
-      obstacles[105].square(375);
-    }
-    if (timer > 7750) {
-      obstacles[106].square(325);
-    }
-    if (timer > 7775) {
-      obstacles[107].square(375);
-    }
-    //===============(7800 = 130s)===============
-    if (timer > 7810) {
-      obstacles[108].square(325);
-    }
-    if (timer > 7835) {
-      obstacles[109].square(375);
-    }
-    if (timer > 7860) {
-      obstacles[110].square(425);
-      obstacles[158].spike(550);
-    }
-    if (timer > 7868) {
-      obstacles[159].spike(550);
-    }
-    if (timer > 7885) {
-      obstacles[111].square(475);
-    }
-    if (timer > 7910) {
-      obstacles[112].square(525);
-    }
-    if (timer > 7945) {
-      obstacles[113].square(475);
-    }
-    if (timer > 7970) {
-      obstacles[114].square(525);
-    }
-    if (timer > 8005) {
-      obstacles[115].square(475);
-    }
-    if (timer > 8040) {
-      obstacles[116].square(425);
-    }
-    if (timer > 8065) {
-      obstacles[117].square(475);
-    }
-    if (timer > 8100) {
-      obstacles[118].square(425);
-    }
-    if (timer > 8135) {
-      obstacles[119].square(375);
-    }
-    if (timer > 8160) {
-      obstacles[120].square(425);
-    }
-    if (timer > 8195) {
-      obstacles[121].square(375);
-    }
-    if (timer > 8220) {
-      obstacles[122].square(425);
-    }
-    if (timer > 8255) {
-      obstacles[123].square(375);
-    }
-    if (timer > 8290) {
-      obstacles[124].square(325);
-    }
-    if (timer > 8315) {
-      obstacles[125].square(375);
-    }
-    if (timer > 8350) {
-      obstacles[126].square(325);
-    }
-    if (timer > 8375) {
-      obstacles[127].square(375);
-    }
-    if (timer > 8400) {
-      obstacles[128].square(425);
-    }
-    //===============(8400 = 140s)===============
-    if (timer > 8408) {
-      obstacles[160].spike(550);
-    }
-    if (timer > 8416) {
-      obstacles[161].spike(550);
-    }
-    if (timer > 8424) {
-      obstacles[162].spike(550);
-    }
-    if (timer > 8432) {
-      obstacles[163].spike(550);
-    }
-    if (timer > 8445) {
-      obstacles[129].square(425);
-    }
-    if (timer > 8470) {
-      obstacles[130].square(475);
-    }
-    if (timer > 8495) {
-      obstacles[131].square(525);
-    }
-    if (timer > 8600) {
-      obstacles[132].square(525);
-    }
-    if (timer > 8640) {
-      obstacles[133].square(475);
-    }
-    if (timer > 8648) {
-      obstacles[164].spike(450);
-    }
-    if (timer > 8656) {
-      obstacles[165].spike(450);
-    }
-    if (timer > 8664) {
-      obstacles[166].spike(450);
-    }
-    if (timer > 8750) {
-      obstacles[134].square(525);
-    }
-    if (timer > 8790) {
-      obstacles[135].square(475);
-    }
-    if (timer > 8798) {
-      obstacles[167].spike(550);
-    }
-    if (timer > 8806) {
-      obstacles[168].spike(550);
-    }
-    if (timer > 8814) {
-      obstacles[169].spike(550);
-    }
-    if (timer > 8900) {
-      obstacles[136].square(525);
-    }
-    if (timer > 8940) {
-      obstacles[137].square(475);
-    }
-    if (timer > 8948) {
-      obstacles[170].spike(550);
-    }
-    if (timer > 8956) {
-      obstacles[171].spike(550);
-    }
-    if (timer > 8964) {
-      obstacles[172].spike(550);
-    }
-    //===============(9000 = 150s)===============
-    if (timer > 9050) {
-      obstacles[138].square(525);
-    }
-    if (timer > 9058) {
-      obstacles[173].spike(550);
-    }
-    if (timer > 9066) {
-      obstacles[174].spike(550);
-    }
-    if (timer > 9074) {
-      obstacles[175].spike(550);
-    }
-    if (timer > 9090) {
-      obstacles[139].square(525);
-    }
-    if (timer > 9130) {
-      obstacles[140].square(475);
-    }
-    if (timer > 9165) {
-      obstacles[141].square(425);
-    }
-    if (timer > 9205) {
-      obstacles[142].square(425);
-    }
-    if (timer > 9230) {
-      obstacles[143].square(475);
-    }
-    if (timer > 9275) {
-      obstacles[144].square(475);
-    }
-    if (timer > 9305) {
-      obstacles[145].square(425);
-    }
-    if (timer > 9340) {
-      obstacles[146].square(375);
-    }
-    if (timer > 9385) {
-      obstacles[147].square(375);
-    }
-    if (timer > 9410) {
-      obstacles[148].square(425);
-    }
-    if (timer > 9455) {
-      obstacles[149].square(425);
-    }
-    if (timer > 9490) {
-      obstacles[150].square(375);
-    }
-    if (timer > 9535) {
-      obstacles[151].square(375);
-    }
-    if (timer > 9560) {
-      obstacles[152].square(425);
-    }
-    if (timer > 9560) {
-      obstacles[176].spike(550);
-    }
-    if (timer > 9568) {
-      obstacles[177].spike(550);
-    }
-    if (timer > 9585) {
-      obstacles[153].square(475);
-    }
-    if (timer > 9610) {
-      obstacles[154].square(525);
-    }
-    //===============(9600 = 160s)===============
-    if (timer > 9655) {
-      obstacles[155].square(525);
-    }
-    if (timer > 9690) {
-      obstacles[156].square(475);
-    }
-    if (timer > 9725) {
-      obstacles[157].square(425);
-    }
-    if (timer > 9760) {
-      obstacles[158].square(375);
-    }
-    if (timer > 9795) {
-      obstacles[159].square(325);
-    }
-    if (timer > 9830) {
-      obstacles[160].square(275);
-    }
-    if (timer > 9865) {
-      obstacles[161].square(225);
-    }
-    if (timer > 9900) {
-      obstacles[162].square(175);
-    }
-    if (timer > 9960) {
-      obstacles[163].square(475);
-    }
-    if (timer > 9985) {
-      obstacles[164].square(525);
-    }
-    if (timer > 9990) {
-      obstacles[165].square(425);
-    }
-    if (timer > 9993) {
-      obstacles[178].spike(550);
-    }
-    if (timer > 10001) {
-      obstacles[179].spike(550);
-    }
-    if (timer > 10035) {
-      obstacles[166].square(425);
-    }
-    if (timer > 10070) {
-      obstacles[167].square(375);
-    }
-    if (timer > 10105) {
-      obstacles[168].square(325);
-    }
-    if (timer > 10130) {
-      obstacles[169].square(375);
-    }
-    if (timer > 10165) {
-      obstacles[170].square(325);
-    }
-    if (timer > 10190) {
-      obstacles[171].square(375);
-    }
-    //===============(10200 = 170s)===============
-    if (timer > 10235) {
-      obstacles[172].square(325);
-    }
-    if (timer > 10260) {
-      obstacles[173].square(375);
-    }
-    if (timer > 10305) {
-      obstacles[174].square(325);
-    }
-    if (timer > 10330) {
-      obstacles[175].square(375);
-    }
-    if (timer > 10355) {
-      obstacles[176].square(425);
-    }
-    if (timer > 10363) {
-      obstacles[180].spike(550);
-    }
-    if (timer > 10371) {
-      obstacles[181].spike(550);
-    }
-    if (timer > 10380) {
-      obstacles[177].square(475);
-    }
-    if (timer > 10425) {
-      obstacles[178].square(475);
-    }
-    if (timer > 10470) {
-      obstacles[179].square(475);
-    }
-    if (timer > 10495) {
-      obstacles[180].square(525);
-    }
-    if (timer > 10600) {
-      obstacles[181].square(525);
-    }
-    if (timer > 10635) {
-      obstacles[182].square(475);
-    }
-    if (timer > 10670) {
-      obstacles[183].square(425);
-    }
-    if (timer > 10705) {
-      obstacles[184].square(375);
-    }
-    if (timer > 10740) {
-      obstacles[185].square(325);
-    }
-    if (timer > 10775) {
-      obstacles[186].square(275);
-    }
-    //===============(10800 = 180s)===============
-    if (timer > 10810) {
-      obstacles[187].square(225);
-    }
-    if (timer > 10845) {
-      obstacles[188].square(175);
-    }
-    if (timer > 10870) {
-      obstacles[189].square(225);
-    }
-    if (timer > 10895) {
-      obstacles[190].square(275);
-    }
-    if (timer > 10920) {
-      obstacles[191].square(325);
-    }
-    if (timer > 10945) {
-      obstacles[192].square(375);
-    }
-    if (timer > 10970) {
-      obstacles[193].square(425);
-    }
-    if (timer > 10995) {
-      obstacles[194].square(475);
-    }
-    if (timer > 11020) {
-      obstacles[195].square(525);
-    }
-    if (timer > 11100) {
-      obstacles[182].spike(550);
-    }
-    if (timer > 11116) {
-      obstacles[183].spike(450);
-    }
-    if (timer > 11132) {
-      obstacles[184].spike(350);
-    }
-    if (timer > 11150) {
-      obstacles[196].square(525);
-      obstacles[185].spike(300);
-    }
-    if (timer > 11166) {
-      obstacles[186].spike(350);
-    }
-    if (timer > 11184) {
-      obstacles[187].spike(450);
-    }
-    if (timer > 11200) {
-      obstacles[188].spike(550);
-    }
-    if (timer > 11350) {
-      obstacles[197].square(525);
-    }
-    if (timer > 11385) {
-      obstacles[198].square(475);
-    }
-    //===============(11400 = 190s)===============
-    if (timer > 11420) {
-      obstacles[199].square(425);
-    }
-    if (timer > 11455) {
-      obstacles[200].square(375);
-    }
-    if (timer > 11490) {
-      obstacles[201].square(325);
-    }
-    if (timer > 11525) {
-      obstacles[202].square(275);
-    }
-    if (timer > 11560) {
-      obstacles[203].square(225);
-    }
-    if (timer > 11595) {
-      obstacles[204].square(175);
-    }
-    if (timer > 11620) {
-      obstacles[205].square(225);
-    }
-    if (timer > 11645) {
-      obstacles[206].square(275);
-    }
-    if (timer > 11670) {
-      obstacles[207].square(325);
-    }
-    if (timer > 11695) {
-      obstacles[208].square(375);
-    }
-    if (timer > 11720) {
-      obstacles[209].square(425);
-    }
-    if (timer > 11745) {
-      obstacles[210].square(475);
-    }
-    if (timer > 11770) {
-      obstacles[211].square(525);
-    }
-    //===============(END)===============
-    if (timer > 11800) { //completed the game
-      gameComplete();
-    }
-    //===============(12000 = 200s)===============
   }
 }

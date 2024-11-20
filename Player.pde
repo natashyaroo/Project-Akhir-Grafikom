@@ -72,13 +72,13 @@ class Player {
     pushMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
 
     rectMode(CENTER); //mengatur rectMode
-    translate(_PlayerX, _PlayerY); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
+    translate(_PlayerX, _PlayerY,1); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
     rotate(jumpAngle); //selalu berputar, tetapi jumpAngle diatur ke 0, yang berarti tidak berputar
 
     strokeWeight(2);
     stroke(22, 85, 60);
     fill(53, 240, 165);
-    rect(0, 0, _PlayerSize, _PlayerSize);
+    square(0, 0, _PlayerSize);
 
     popMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
   }
