@@ -1,23 +1,20 @@
 class Game {
-  //mendeklarasikan variabel global
-  int timer = second(); //digunakan untuk skor dan mengatur waktu rintangan
-  int deathCounter = 0; //digunakan untuk melacak kematian (dapat direset secara manual juga)
-  int highScore = 0; //membuat penghitung yang digunakan untuk menampilkan skor tertinggi pemain
-  int fade = 0; //digunakan untuk efek memudar ke gelap saat pemain menang
+  // Mendeklarasikan variabel global
+  int timer = second(); // Digunakan untuk skor dan mengatur waktu kemunculan rintangan
+  int deathCounter = 0; // Digunakan untuk melacak jumlah kematian (bisa direset secara manual)
+  int highScore = 0; // Digunakan untuk menampilkan skor tertinggi pemain
+  int fade = 0; // Digunakan untuk efek memudar saat pemain menang
 
-  boolean isOver = false; //digunakan untuk mengecek game selesai
+  boolean isOver = false; // Mengecek apakah permainan selesai
+  boolean buttonPressed = false; 
+  boolean soundOn = true; // Mengecek status suara latar (aktif atau mati)
+  boolean sfxOn = true; // Mengecek status efek suara (aktif atau mati)
 
-  boolean buttonPressed = false;
-  boolean soundOn = true; 
-  boolean sfxOn = true;
-
-
+  // Fungsi untuk menampilkan menu pause
   void pause() {
+    background(0); // Latar belakang hitam
 
-    background(0);
-
-
-    // tombol sound off / on
+    // Mengatur tombol untuk mengaktifkan/mematikan suara
     float boxX = width / 2;
     float boxY = height / 2;
 
@@ -31,21 +28,20 @@ class Game {
       fill(255, 50, 150); // Tombol ditekan
       soundOn = false;
     } else {
-      fill(200, 50, 150);
+      fill(200, 50, 150); // Tombol tidak ditekan
       soundOn = true;
     }
     stroke(0);
-    box(blockWidth, blockHeight, blockDepth); // Gambar balok dengan dimensi tertentu
+    box(blockWidth, blockHeight, blockDepth); // Membuat kotak tombol dengan dimensi tertentu
 
-
-
+    // Menampilkan status suara (ON/OFF)
     if (soundOn) {
       translate(-85, 10, 50);
       fill(0); // Warna teks
       textSize(16);
-      text("SOUND : ON", 0, 0); // Teks di posisi tengah tombol
+      text("SUARA: AKTIF", 0, 0); // Teks posisi tengah tombol
       if (!backgroundMusic.isPlaying()) {
-        backgroundMusic.play();
+        backgroundMusic.play(); // Memutar musik latar
         backgroundMusic.amp(0.5);
         sfxOn = true;
       }
@@ -53,41 +49,38 @@ class Game {
       translate(-85, 10, 50);
       fill(0); // Warna teks
       textSize(16);
-      text("SOUND : OFF", 0, 0); // Teks di posisi tengah tombol
+      text("SUARA: MATI", 0, 0); // Teks posisi tengah tombol
       if (backgroundMusic.isPlaying()) {
-        backgroundMusic.pause();
+        backgroundMusic.pause(); // Menghentikan musik latar
         sfxOn = false;
       }
     }
-
     popMatrix();
 
-
-
-    // Reuse the particle initialization from Menu
+    // Inisialisasi partikel di menu (jika belum ada)
     if (!menu.initialized) {
       menu.init();
     }
 
-    // Load background and assets if not already loaded
+    // Memuat latar belakang dan aset (jika belum dimuat)
     if (!menu.assetsLoaded) {
       menu.loadAssets();
     }
 
-    // Display background
+    // Menampilkan latar belakang menu
     if (menu.bgTexture != null) {
       image(menu.bgTexture, 0, 0, width, height);
     } else {
-      background(40, 45, 60);
+      background(40, 45, 60); // Warna cadangan untuk latar belakang
     }
 
-    // Update and display particles
+    // Memperbarui dan menampilkan partikel di menu
     for (Point3D p : menu.particles) {
       p.update();
       p.display();
     }
 
-    // Display pause image text
+    // Menampilkan gambar teks pause
     PImage pauseText = loadImage("pause.png");
     if (pauseText != null) {
       float maxWidth = width * 0.90;
@@ -101,47 +94,47 @@ class Game {
       float textHeight = pauseText.height * scale;
 
       float textX = (width - textWidth) / 2;
-      float textY = (height ) - textHeight - 250;
+      float textY = (height) - textHeight - 250;
 
       image(pauseText, textX, textY, textWidth, textHeight);
     }
 
-    // Draw buttons
+    // Menggambar tombol
     int buttonWidth = 200;
     int buttonHeight = 50;
     int buttonX = (width - buttonWidth) / 2;
 
-    // Button hover states
+    // Menentukan area hover tombol
     boolean overRestartButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
       mouseY >= 350 && mouseY <= 350 + buttonHeight;
     boolean overMainMenuButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
       mouseY >= 420 && mouseY <= 420 + buttonHeight;
 
-    // Draw Restart button
+    // Tombol Restart
     pushStyle();
     if (overRestartButton) {
       noStroke();
-      fill(255, 50, 150);
+      fill(255, 50, 150); // Warna tombol saat dihover
     } else {
       noStroke();
-      fill(200, 50, 150);
+      fill(200, 50, 150); // Warna tombol default
     }
     strokeWeight(2);
-    rect(buttonX, 350, buttonWidth, buttonHeight, 10);
+    rect(buttonX, 350, buttonWidth, buttonHeight, 10); // Gambar tombol
 
     fill(255);
     textSize(32);
     textAlign(CENTER, CENTER);
-    text("RESTART", buttonX + buttonWidth/2, 350 + buttonHeight/2);
+    text("ULANG", buttonX + buttonWidth / 2, 350 + buttonHeight / 2);
     popStyle();
 
-    // Draw Main Menu button
+    // Tombol Menu Utama
     pushStyle();
     if (overMainMenuButton) {
-      fill(255, 50, 150);
+      fill(255, 50, 150); // Warna tombol saat dihover
       noStroke();
     } else {
-      fill(200, 50, 150);
+      fill(200, 50, 150); // Warna tombol default
       noStroke();
     }
     strokeWeight(2);
@@ -150,9 +143,12 @@ class Game {
     fill(255);
     textSize(32);
     textAlign(CENTER, CENTER);
-    text("MENU", buttonX + buttonWidth/2, 420 + buttonHeight/2);
+    text("MENU", buttonX + buttonWidth / 2, 420 + buttonHeight / 2);
     popStyle();
   }
+
+
+
 
   // Add this method to handle button clicks during pause
   void pauseMousePressed() {
