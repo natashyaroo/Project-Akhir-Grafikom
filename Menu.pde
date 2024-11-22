@@ -156,7 +156,7 @@ class Menu {
 class Point3D {
   float x, y, z; // Posisi partikel
   float speed;    // Kecepatan partikel bergerak
-  float breathingAngle; // Sudut untuk efek pernapasan (gerakan berdenyut)
+  float breathingAngle; // Sudut untuk efek breathing
   float size;     // Ukuran partikel
   color particleColor; // Warna partikel
   
@@ -166,19 +166,19 @@ class Point3D {
     this.y = y;
     this.z = z;
     this.speed = random(0.3, 1.2); // Kecepatan acak untuk gerakan partikel
-    this.breathingAngle = random(TWO_PI); // Sudut acak untuk efek pernapasan
+    this.breathingAngle = random(TWO_PI); // Sudut acak untuk efek breathing
     this.size = random(2, 4);      // Ukuran acak partikel
     this.particleColor = c;        // Warna partikel yang diterima
   }
   
-  // Mengupdate posisi partikel dan efek pernapasan
+  // Mengupdate posisi partikel dan efek breathing
   void update() {
     y -= speed; // Menggerakkan partikel ke atas (mengurangi posisi Y)
     
-    // Efek pernapasan (perubahan ukuran secara sinusoidal)
-    breathingAngle += 0.05; // Memperbarui sudut pernapasan
-    float breathingEffect = sin(breathingAngle) * 0.5; // Efek pernapasan
-    size = 2 + breathingEffect; // Mengubah ukuran partikel berdasarkan efek pernapasan
+    // Efek breathing
+    breathingAngle += 0.05; // Memperbarui sudut breathing
+    float breathingEffect = sin(breathingAngle) * 0.5; // Efek breathing
+    size = 2 + breathingEffect; // Mengubah ukuran partikel berdasarkan efek breathing
     
     // Reset posisi saat partikel melewati bagian atas layar
     if (y < 0) {

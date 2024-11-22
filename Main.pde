@@ -134,3 +134,10 @@ void mouseClicked() {
     print("test");
   }
 }
+void mousePressed() {
+  if (!isPlaying) {
+    menu.mousePressed(); // Existing menu mouse press handling
+  } else if (isPause) {
+    game.pauseMousePressed(); // New pause screen mouse press handling
+  }
+}

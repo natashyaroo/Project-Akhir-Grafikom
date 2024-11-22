@@ -5,40 +5,123 @@ class Game {
   int highScore = 0; //membuat penghitung yang digunakan untuk menampilkan skor tertinggi pemain
   int fade = 0; //digunakan untuk efek memudar ke gelap saat pemain menang
 
-  boolean overBox1 = false;
+  boolean isOver = false; //digunakan untuk mengecek game selesai
 
 
-  void pause() {
-
-    background(#011d33);
-
-    image(img, 0, 240);
-    image(img, 631, 240);
-
-    push();
-
-    translate(-30, 70, 0);
-    //text("X: "+mouseX+"   Y: "+mouseY, 50, 50);
-
-    push();
-    fill(255, 0, 0);
-    textSize(70);
-    text("PAUSE!!!", 223, 200);
-    textSize(25);
-    text("Score tertinggi : "+highScore/60, 267, 250);
-    pop();
-
-    pushMatrix();
-    textSize(23);
-    fill(255, 0, 0);
-    translate(width/2, height/2, 0);
-    text("Navigasi:", -200, 0);
-    text("P = Menu Utama", -200, 50);
-    text("R = Coba Lagi", -200, 100);
-    popMatrix();
-
-    pop();
+void pause() {
+  // Reuse the particle initialization from Menu
+  if (!menu.initialized) {
+    menu.init();
   }
+  
+  // Load background and assets if not already loaded
+  if (!menu.assetsLoaded) {
+    menu.loadAssets();
+  }
+  
+  // Display background
+  if (menu.bgTexture != null) {
+    image(menu.bgTexture, 0, 0, width, height);
+  } else {
+    background(40, 45, 60);
+  }
+  
+  // Update and display particles
+  for (Point3D p : menu.particles) {
+    p.update();
+    p.display();
+  }
+  
+  // Display pause image text
+  PImage pauseText = loadImage("pause.png");
+  if (pauseText != null) {
+    float maxWidth = width * 0.90;
+    float maxHeight = height * 0.65;
+    
+    float scaleW = maxWidth / pauseText.width;
+    float scaleH = maxHeight / pauseText.height;
+    float scale = min(scaleW, scaleH);
+    
+    float textWidth = pauseText.width * scale;
+    float textHeight = pauseText.height * scale;
+    
+    float textX = (width - textWidth) / 2;
+    float textY = (height ) - textHeight - 250;
+    
+    image(pauseText, textX, textY, textWidth, textHeight);
+  }
+  
+  // Draw buttons
+  int buttonWidth = 200;
+  int buttonHeight = 50;
+  int buttonX = (width - buttonWidth) / 2;
+  
+  // Button hover states
+  boolean overRestartButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+                               mouseY >= 350 && mouseY <= 350 + buttonHeight;
+  boolean overMainMenuButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+                                mouseY >= 420 && mouseY <= 420 + buttonHeight;
+  
+  // Draw Restart button
+  pushStyle();
+  if (overRestartButton) {
+    fill(255, 50, 150);
+    stroke(255, 100, 200);
+  } else {
+    fill(200, 50, 150);
+    stroke(150, 50, 100);
+  }
+  strokeWeight(2);
+  rect(buttonX, 350, buttonWidth, buttonHeight, 10);
+  
+  fill(255);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text("RESTART", buttonX + buttonWidth/2, 350 + buttonHeight/2);
+  popStyle();
+  
+  // Draw Main Menu button
+  pushStyle();
+  if (overMainMenuButton) {
+    fill(255, 50, 150);
+    stroke(255, 100, 200);
+  } else {
+    fill(200, 50, 150);
+    stroke(150, 50, 100);
+  }
+  strokeWeight(2);
+  rect(buttonX, 420, buttonWidth, buttonHeight, 10);
+  
+  fill(255);
+  textSize(32);
+  textAlign(CENTER, CENTER);
+  text("MENU", buttonX + buttonWidth/2, 420 + buttonHeight/2);
+  popStyle();
+}
+
+// Add this method to handle button clicks during pause
+void pauseMousePressed() {
+  int buttonWidth = 200;
+  int buttonHeight = 50;
+  int buttonX = (width - buttonWidth) / 2;
+  
+  // Restart button
+  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+      mouseY >= 350 && mouseY <= 350 + buttonHeight) {
+    reset();
+    display();
+    isPause = false;
+  }
+  
+  // Main Menu button
+  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+      mouseY >= 420 && mouseY <= 420 + buttonHeight) {
+    isPlaying = false;
+    isPause = false;
+    reset();
+    menu.display();
+  }
+}
 
   void display() {
 
@@ -51,7 +134,7 @@ class Game {
       obstacles[i].move(4); //menginisialisasi kecepatan gerak untuk semua rintangan
     }
     obstacleSpawn(); //memunculkan rintangan (berdasarkan timer)
-    collision(); //memeriksa tabrakan antara rintangan dan hero (pemain)
+    //collision(); //memeriksa tabrakan antara rintangan dan hero (pemain)/
 
     //hero (pemain)
     hero.display();
@@ -59,8 +142,12 @@ class Game {
 
     //timer, papan skor, dan tampilan kontrol
     timer();
-    scoreboard();
-    displayControls();
+
+    if (!isOver) {
+      scoreboard();
+      displayControls();
+    }
+
     pop();
   }
 
@@ -183,6 +270,16 @@ class Game {
     pop();
 
 
+    // gambar rumah
+    push();
+    noStroke();
+    fill(#D68759);
+    quad(455, 327, 500, 327, 530, 350, 430, 350);
+    fill(#AA0D05);
+    rect(441, 350, 80, 40);
+    pop(); //akhir gambar rumah
+
+
     // gambar bukit
     push();
 
@@ -264,6 +361,7 @@ class Game {
 
   void gameComplete() {
     //memudar ke hitam dengan bertindak sebagai peningkatan alpha untuk rect yang menutupi layar
+    translate(0, 0, 10);
     noStroke();
     fill(0, 0, 0, fade);
     rectMode(CENTER);
@@ -309,12 +407,7 @@ class Game {
 
 
   void obstacleSpawn() {//memunculkan rintangan berdasarkan timer (bagian kode ini sangat panjang)
-    /*
-Catatan untuk diri sendiri:
-     - lantai berada di 525 (kotak) dan 550 (paku)
-     - jarak waktu yang baik untuk objek yang terhubung adalah 12 (kotak) dan 8 (paku)
-     - hampir 1200 baris kode untuk bagian ini :D
-     */
+
     if (timer > 150) {
       obstacles[1].spike(550);
     }
@@ -434,15 +527,11 @@ Catatan untuk diri sendiri:
     if (timer > 1658) {
       obstacles[23].spike(550);
     }
-    if (timer > 1690) {
-      obstacles[24].spike(550);
+    if (timer > 1730) {
+      obstacles[26].spike(550);
     }
-    if (timer > 1698) {
-      obstacles[25].spike(550);
-    }
-
-    if (timer > 1775) {
-      obstacles[28].spike(550);
+    if (timer > 1738) {
+      obstacles[27].spike(550);
     }
     //===============(1800 = 30s)===============
     if (timer > 1830) {
@@ -450,12 +539,6 @@ Catatan untuk diri sendiri:
     }
     if (timer > 1838) {
       obstacles[30].spike(550);
-    }
-    if (timer > 1870) {
-      obstacles[31].spike(550);
-    }
-    if (timer > 1878) {
-      obstacles[32].spike(550);
     }
     if (timer > 1940) {
       obstacles[33].spike(550);
@@ -465,12 +548,6 @@ Catatan untuk diri sendiri:
     }
     if (timer > 2008) {
       obstacles[35].spike(550);
-    }
-    if (timer > 2040) {
-      obstacles[36].spike(550);
-    }
-    if (timer > 2048) {
-      obstacles[37].spike(550);
     }
     if (timer > 2080) {
       obstacles[38].spike(550);
@@ -586,9 +663,6 @@ Catatan untuk diri sendiri:
     if (timer > 3160) {
       obstacles[38].square(375);
     }
-    if (timer > 3210) {
-      obstacles[54].spike(550);
-    }
     if (timer > 3250) {
       obstacles[55].spike(550);
     }
@@ -649,6 +723,14 @@ Catatan untuk diri sendiri:
     if (timer > 3580) {
       obstacles[70].spike(550);
     }
-    //===============(3600 = 60s)===============
+    if (timer > 3800) {
+      gameComplete();
+      isOver = true;
+    }
+    if (timer > 4100) {
+      delay(2000);
+      isOver = false;
+      reset();
+    }
   }
 }
