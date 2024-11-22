@@ -7,121 +7,176 @@ class Game {
 
   boolean isOver = false; //digunakan untuk mengecek game selesai
 
+  boolean buttonPressed = false;
+  boolean soundOn = true; 
+  boolean sfxOn = true;
 
-void pause() {
-  // Reuse the particle initialization from Menu
-  if (!menu.initialized) {
-    menu.init();
-  }
-  
-  // Load background and assets if not already loaded
-  if (!menu.assetsLoaded) {
-    menu.loadAssets();
-  }
-  
-  // Display background
-  if (menu.bgTexture != null) {
-    image(menu.bgTexture, 0, 0, width, height);
-  } else {
-    background(40, 45, 60);
-  }
-  
-  // Update and display particles
-  for (Point3D p : menu.particles) {
-    p.update();
-    p.display();
-  }
-  
-  // Display pause image text
-  PImage pauseText = loadImage("pause.png");
-  if (pauseText != null) {
-    float maxWidth = width * 0.90;
-    float maxHeight = height * 0.65;
-    
-    float scaleW = maxWidth / pauseText.width;
-    float scaleH = maxHeight / pauseText.height;
-    float scale = min(scaleW, scaleH);
-    
-    float textWidth = pauseText.width * scale;
-    float textHeight = pauseText.height * scale;
-    
-    float textX = (width - textWidth) / 2;
-    float textY = (height ) - textHeight - 250;
-    
-    image(pauseText, textX, textY, textWidth, textHeight);
-  }
-  
-  // Draw buttons
-  int buttonWidth = 200;
-  int buttonHeight = 50;
-  int buttonX = (width - buttonWidth) / 2;
-  
-  // Button hover states
-  boolean overRestartButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
-                               mouseY >= 350 && mouseY <= 350 + buttonHeight;
-  boolean overMainMenuButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
-                                mouseY >= 420 && mouseY <= 420 + buttonHeight;
-  
-  // Draw Restart button
-  pushStyle();
-  if (overRestartButton) {
-    fill(255, 50, 150);
-    stroke(255, 100, 200);
-  } else {
-    fill(200, 50, 150);
-    stroke(150, 50, 100);
-  }
-  strokeWeight(2);
-  rect(buttonX, 350, buttonWidth, buttonHeight, 10);
-  
-  fill(255);
-  textSize(32);
-  textAlign(CENTER, CENTER);
-  text("RESTART", buttonX + buttonWidth/2, 350 + buttonHeight/2);
-  popStyle();
-  
-  // Draw Main Menu button
-  pushStyle();
-  if (overMainMenuButton) {
-    fill(255, 50, 150);
-    stroke(255, 100, 200);
-  } else {
-    fill(200, 50, 150);
-    stroke(150, 50, 100);
-  }
-  strokeWeight(2);
-  rect(buttonX, 420, buttonWidth, buttonHeight, 10);
-  
-  fill(255);
-  textSize(32);
-  textAlign(CENTER, CENTER);
-  text("MENU", buttonX + buttonWidth/2, 420 + buttonHeight/2);
-  popStyle();
-}
 
-// Add this method to handle button clicks during pause
-void pauseMousePressed() {
-  int buttonWidth = 200;
-  int buttonHeight = 50;
-  int buttonX = (width - buttonWidth) / 2;
-  
-  // Restart button
-  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+  void pause() {
+
+    background(0);
+
+
+    // tombol sound off / on
+    float boxX = width / 2;
+    float boxY = height / 2;
+
+    float blockWidth = 190;
+    float blockHeight = 75;
+    float blockDepth = 50;
+
+    pushMatrix();
+    translate(boxX, boxY, 0);
+    if (buttonPressed) {
+      fill(255, 50, 150); // Tombol ditekan
+      soundOn = false;
+    } else {
+      fill(200, 50, 150);
+      soundOn = true;
+    }
+    stroke(0);
+    box(blockWidth, blockHeight, blockDepth); // Gambar balok dengan dimensi tertentu
+
+
+
+    if (soundOn) {
+      translate(-85, 10, 50);
+      fill(0); // Warna teks
+      textSize(16);
+      text("SOUND : ON", 0, 0); // Teks di posisi tengah tombol
+      if (!backgroundMusic.isPlaying()) {
+        backgroundMusic.play();
+        backgroundMusic.amp(0.5);
+        sfxOn = true;
+      }
+    } else {
+      translate(-85, 10, 50);
+      fill(0); // Warna teks
+      textSize(16);
+      text("SOUND : OFF", 0, 0); // Teks di posisi tengah tombol
+      if (backgroundMusic.isPlaying()) {
+        backgroundMusic.pause();
+        sfxOn = false;
+      }
+    }
+
+    popMatrix();
+
+
+
+    // Reuse the particle initialization from Menu
+    if (!menu.initialized) {
+      menu.init();
+    }
+
+    // Load background and assets if not already loaded
+    if (!menu.assetsLoaded) {
+      menu.loadAssets();
+    }
+
+    // Display background
+    if (menu.bgTexture != null) {
+      image(menu.bgTexture, 0, 0, width, height);
+    } else {
+      background(40, 45, 60);
+    }
+
+    // Update and display particles
+    for (Point3D p : menu.particles) {
+      p.update();
+      p.display();
+    }
+
+    // Display pause image text
+    PImage pauseText = loadImage("pause.png");
+    if (pauseText != null) {
+      float maxWidth = width * 0.90;
+      float maxHeight = height * 0.65;
+
+      float scaleW = maxWidth / pauseText.width;
+      float scaleH = maxHeight / pauseText.height;
+      float scale = min(scaleW, scaleH);
+
+      float textWidth = pauseText.width * scale;
+      float textHeight = pauseText.height * scale;
+
+      float textX = (width - textWidth) / 2;
+      float textY = (height ) - textHeight - 250;
+
+      image(pauseText, textX, textY, textWidth, textHeight);
+    }
+
+    // Draw buttons
+    int buttonWidth = 200;
+    int buttonHeight = 50;
+    int buttonX = (width - buttonWidth) / 2;
+
+    // Button hover states
+    boolean overRestartButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+      mouseY >= 350 && mouseY <= 350 + buttonHeight;
+    boolean overMainMenuButton = mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
+      mouseY >= 420 && mouseY <= 420 + buttonHeight;
+
+    // Draw Restart button
+    pushStyle();
+    if (overRestartButton) {
+      noStroke();
+      fill(255, 50, 150);
+    } else {
+      noStroke();
+      fill(200, 50, 150);
+    }
+    strokeWeight(2);
+    rect(buttonX, 350, buttonWidth, buttonHeight, 10);
+
+    fill(255);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text("RESTART", buttonX + buttonWidth/2, 350 + buttonHeight/2);
+    popStyle();
+
+    // Draw Main Menu button
+    pushStyle();
+    if (overMainMenuButton) {
+      fill(255, 50, 150);
+      noStroke();
+    } else {
+      fill(200, 50, 150);
+      noStroke();
+    }
+    strokeWeight(2);
+    rect(buttonX, 420, buttonWidth, buttonHeight, 10);
+
+    fill(255);
+    textSize(32);
+    textAlign(CENTER, CENTER);
+    text("MENU", buttonX + buttonWidth/2, 420 + buttonHeight/2);
+    popStyle();
+  }
+
+  // Add this method to handle button clicks during pause
+  void pauseMousePressed() {
+    int buttonWidth = 200;
+    int buttonHeight = 50;
+    int buttonX = (width - buttonWidth) / 2;
+
+    // Restart button
+    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
       mouseY >= 350 && mouseY <= 350 + buttonHeight) {
-    reset();
-    display();
-    isPause = false;
-  }
-  
-  // Main Menu button
-  if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && 
+      reset();
+      display();
+      isPause = false;
+    }
+
+    // Main Menu button
+    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth &&
       mouseY >= 420 && mouseY <= 420 + buttonHeight) {
-    isPlaying = false;
-    isPause = false;
-    reset();
-    menu.display();
+      isPlaying = false;
+      isPause = false;
+      reset();
+      menu.display();
+    }
   }
-}
 
   void display() {
 
@@ -134,7 +189,7 @@ void pauseMousePressed() {
       obstacles[i].move(4); //menginisialisasi kecepatan gerak untuk semua rintangan
     }
     obstacleSpawn(); //memunculkan rintangan (berdasarkan timer)
-    //collision(); //memeriksa tabrakan antara rintangan dan hero (pemain)/
+    collision(); //memeriksa tabrakan antara rintangan dan hero (pemain)
 
     //hero (pemain)
     hero.display();
@@ -157,7 +212,10 @@ void pauseMousePressed() {
       if (hero.getX() > obstacles[i].spikeGetX1() && hero.getX() < obstacles[i].spikeGetX2()) {
         if (hero._PlayerY > obstacles[i].spikeGetY1() && hero._PlayerY < obstacles[i].spikeGetY2()) {
           println("tertusuk Paku");
-          sfxDeath.play();
+          if (game.sfxOn) {// untuk mengecek tombol sound on/off
+            sfxDeath.play();
+          }
+
           backgroundMusic.stop();
           delay(2900);
           reset();
@@ -168,7 +226,9 @@ void pauseMousePressed() {
         //jika pemain menabrak bagian depan kotak
         if (hero._PlayerY > obstacles[i].squareGetY1() && hero._PlayerY < obstacles[i].squareGetY2()) {
           println("tertabrak Kotak");
-          sfxDeath.play();
+          if (game.sfxOn) { // untuk mengecek tombol sound on/off
+            sfxDeath.play();
+          }
           backgroundMusic.stop();
           delay(2900); // mendelay selama 2.9 detik
           reset();
@@ -192,10 +252,11 @@ void pauseMousePressed() {
 
   void reset() { //mereset permainan kembali ke awal
     //memutar ulang musik dari awal
-    backgroundMusic.stop();
-    backgroundMusic.play();
-    backgroundMusic.amp(0.2);
-
+    if(soundOn){
+      backgroundMusic.play();
+      backgroundMusic.amp(0.5);
+    }
+    
     //mereset timer
     timer = 0;
     //mereset rintangan
@@ -243,7 +304,6 @@ void pauseMousePressed() {
 
   void scenery() {
     background(20, 24, 82);
-
 
     //latar papan score
     push();

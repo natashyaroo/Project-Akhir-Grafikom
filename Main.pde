@@ -37,7 +37,7 @@ void setup() {
   //menginisialisasi musik latar
   backgroundMusic = new SoundFile(this, "backgroundmusic.mp3");
   backgroundMusic.play();
-  backgroundMusic.amp(0.2); //amplitudo di gunakan untuk mengatur volume (scale 0-1)
+  backgroundMusic.amp(0.5); //amplitudo di gunakan untuk mengatur volume (scale 0-1)
   backgroundMusic.rate(1.25); // mengatur kecepatan pemutaran sound
   //menginisialisasi suara kematian
   sfxJump = new SoundFile(this, "jump.mp3");
@@ -112,15 +112,8 @@ void keyPressed() {
   case BACKSPACE:
     if (!isPause && isPlaying) {
       isPause = true;
-      if (backgroundMusic.isPlaying()) {
-        backgroundMusic.pause();
-      }
     } else {
       isPause = false;
-      if (!backgroundMusic.isPlaying()) {
-        backgroundMusic.amp(0.2);
-        backgroundMusic.play();
-      }
     }
   }
 }
@@ -139,5 +132,19 @@ void mousePressed() {
     menu.mousePressed(); // Existing menu mouse press handling
   } else if (isPause) {
     game.pauseMousePressed(); // New pause screen mouse press handling
+  }
+
+
+  // Posisi dan ukuran tombol
+  float boxX = width / 2;
+  float boxY = height / 2;
+  float boxWidth = 190;  // Lebar tombol
+  float boxHeight = 75;  // Tinggi tombol
+
+  // Cek apakah mouse berada di area tombol
+  if (mouseX > boxX - boxWidth / 2 && mouseX < boxX + boxWidth / 2 &&
+    mouseY > boxY - boxHeight / 2 && mouseY < boxY + boxHeight / 2) {
+    game.buttonPressed = !game.buttonPressed; // Ganti status tombol
+    println(1); // Output angka 1
   }
 }

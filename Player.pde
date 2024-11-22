@@ -26,10 +26,12 @@ class Player {
   void jump() { //membuat Player melompat, ini akan dikendalikan oleh pemain game
     if (notInAir) { //jika pemain ada di tanah == true
       isJumping = true; //mengatur boolean ke true, yang memicu lompatan di "physics()"
-      
-        sfxJump.cue(0.1); // memulai sesuai detik pada file sound
+
+      sfxJump.cue(0.1); // memulai sesuai detik pada file sound
+
+      if (game.sfxOn) {
         sfxJump.play();
-      
+      }
     }
   }
 
@@ -72,7 +74,7 @@ class Player {
     pushMatrix(); //matriks diperlukan untuk mengandung transformasi rotasi
 
     rectMode(CENTER); //mengatur rectMode
-    translate(_PlayerX, _PlayerY,1); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
+    translate(_PlayerX, _PlayerY, 1); //mengatur 0,0 menjadi di dalam dirinya sendiri, digunakan untuk rotasi yang benar
     rotate(jumpAngle); //selalu berputar, tetapi jumpAngle diatur ke 0, yang berarti tidak berputar
 
     strokeWeight(2);
