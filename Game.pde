@@ -33,8 +33,8 @@ class Game {
     fill(255, 0, 0);
     translate(width/2, height/2, 0);
     text("Navigasi:", -200, 0);
-    text("p => kembali ke main menu", -200, 50);
-    text("r => retry game", -200, 100);
+    text("P = Menu Utama", -200, 50);
+    text("R = Coba Lagi", -200, 100);
     popMatrix();
 
     pop();
